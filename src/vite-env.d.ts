@@ -1,1 +1,1 @@
-/// <reference types="web-todo-Jvapl" />
+/// <reference types="vite/client" />
