@@ -24,7 +24,6 @@ const addElement = () => {
 
 inputTodo.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-        s;
         addElement();
     }
 });
