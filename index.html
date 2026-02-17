@@ -7,7 +7,13 @@
     <title>Web todolist project</title>
   </head>
   <body>
-    <h1>Web todolist app</h1>
+    <main class="todo">
+      <h1>Web todolist app</h1>
+      <label for="">Add new task: <input type="text" id="todo-input"></label>
+      <button id="add-todo-button" type="button"><b>New Todo</b></button>
+      <p hidden id="error">Please enter a todo !!</p>
+      <ul id="todo-elements"></ul>
+    </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
