@@ -30,22 +30,23 @@ const displayTask = (text: TaskType) => {
   const statusCheck = document.createElement('label')
   const checkBox = document.createElement('input')
 
-  let status11 = 'Uncompleted'
-  statusCheck.textContent = status11
-  newLi.id = 'task-to-do'
-  spanCreated.id = 'aa'
+  let taskStatusText = 'Uncompleted'
+  statusCheck.textContent = taskStatusText
+  newLi.classList.add('task-to-do')
+  spanCreated.classList.add( 'task-status-container')
   checkBox.type = 'checkbox'
 
   const statusBox = () => {
     if (checkBox.checked) {
-      status11 = 'Completed'
-      statusCheck.textContent = status11
-      spanCreated.style.color = '#00F000'
+      taskStatusText = 'Completed'
+      statusCheck.textContent = taskStatusText
+      spanCreated.style.color = 'var(--completed-task-color)'
       saveLocalStorage()
     } else {
-      status11 = 'Uncompleted'
-      statusCheck.textContent = status11
+      taskStatusText = 'Uncompleted'
+      statusCheck.textContent = taskStatusText
       spanCreated.style.color = ''
+      saveLocalStorage()
     }
   }
 

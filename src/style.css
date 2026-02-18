@@ -4,6 +4,9 @@ body {
   margin: 0;
   background-color: burlywood;
 }
+:root {
+  --completed-task-color: greenyellow;
+}
 
 * {
   font-family: Helvetica, Arial, sans-serif;
@@ -30,9 +33,8 @@ main h1 {
 
 #add-todo-button {
   border-style: none;
-  background-color: #00ff00;
+  background-color: greenyellow;
   border-radius: 0.4rem;
-  color: #ffffff;
   font-size: 1rem;
 }
 #error {
@@ -40,7 +42,7 @@ main h1 {
   margin: 0.6rem 0 0 0;
 }
 
-#task-to-do {
+.task-to-do {
   background-color: cornflowerblue;
   border-radius: 10px;
   list-style: none;
@@ -60,7 +62,7 @@ li {
   margin-top: 0.5rem;
 }
 
-#aa {
+.task-status-container{
   display: flex;
   gap: 1rem;
 }
