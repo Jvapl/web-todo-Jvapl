@@ -62,7 +62,7 @@ li {
   margin-top: 0.5rem;
 }
 
-.task-status-container{
+.task-status-container {
   display: flex;
   gap: 1rem;
 }

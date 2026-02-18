@@ -33,7 +33,7 @@ const displayTask = (text: TaskType) => {
   let taskStatusText = 'Uncompleted'
   statusCheck.textContent = taskStatusText
   newLi.classList.add('task-to-do')
-  spanCreated.classList.add( 'task-status-container')
+  spanCreated.classList.add('task-status-container')
   checkBox.type = 'checkbox'
 
   const statusBox = () => {
