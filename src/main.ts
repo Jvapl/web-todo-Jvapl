@@ -132,19 +132,23 @@ buttonAdd.addEventListener('click', () => {
   addElement()
 })
 
-let isCofirming = false
+let isConfirming = false
 
 deleteAllTodo.addEventListener('click', () => {
-  if (!isCofirming) {
-    isCofirming = true
-    deleteAllTodo.textContent = 'Are you sure ?'
-    deleteAllTodo.classList.add('warning')
-  } else {
+  const warningTimeout = () => {
     taskTodo.length = 0
     todoElements.innerHTML = ''
     saveLocalStorage()
-    isCofirming = false
+    isConfirming = false
     deleteAllTodo.textContent = 'Deleted all'
     deleteAllTodo.classList.remove('warning')
+  }
+  if (!isConfirming) {
+    isConfirming = true
+    deleteAllTodo.textContent = 'Are you sure ?'
+    deleteAllTodo.classList.add('warning')
+    setTimeout(warningTimeout, 5000)
+  } else {
+    warningTimeout()
   }
 })
