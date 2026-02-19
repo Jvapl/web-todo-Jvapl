@@ -3,6 +3,9 @@ const inputTodo = document.querySelector<HTMLInputElement>('#todo-input')
 const buttonAdd = document.querySelector<HTMLButtonElement>('#add-todo-button')
 const todoElements = document.querySelector<HTMLUListElement>('#todo-elements')
 const errorInput = document.querySelector<HTMLParagraphElement>('#error')
+const deleteAllTodo = document.querySelector<HTMLButtonElement>(
+  '#task-to-do__remove-All-button',
+)
 let taskTodo: TaskType[] = []
 
 // Crée un type
@@ -13,7 +16,13 @@ interface TaskType {
 }
 
 // Check si touts mes elements existent vraiment dans mon HTML
-if (!inputTodo || !buttonAdd || !todoElements || !errorInput) {
+if (
+  !inputTodo ||
+  !buttonAdd ||
+  !todoElements ||
+  !errorInput ||
+  !deleteAllTodo
+) {
   throw new Error(
     "Didn't find one or many DOM elements. Verify the IDs from index.html.", //
   )
@@ -121,4 +130,25 @@ inputTodo.addEventListener('keydown', (event) => {
 })
 buttonAdd.addEventListener('click', () => {
   addElement()
+})
+
+let isConfirming = false
+
+deleteAllTodo.addEventListener('click', () => {
+  const warningTimeout = () => {
+    taskTodo.length = 0
+    todoElements.innerHTML = ''
+    saveLocalStorage()
+    isConfirming = false
+    deleteAllTodo.textContent = 'Deleted all'
+    deleteAllTodo.classList.remove('warning')
+  }
+  if (!isConfirming) {
+    isConfirming = true
+    deleteAllTodo.textContent = 'Are you sure ?'
+    deleteAllTodo.classList.add('warning')
+    setTimeout(warningTimeout, 5000)
+  } else {
+    warningTimeout()
+  }
 })
