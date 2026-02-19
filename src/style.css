@@ -66,3 +66,9 @@ li {
   display: flex;
   gap: 1rem;
 }
+
+.removeButton {
+  background-color: red;
+  color: #ffffff;
+  padding: 1rem;
+}

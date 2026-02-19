@@ -61,7 +61,6 @@ const displayTask = (text: TaskType) => {
   todoElements.appendChild(newLi)
   spanCreated.appendChild(statusCheck)
   spanCreated.appendChild(checkBox)
-  saveLocalStorage()
   // je dois crée une variable que verifie si ma checkBox est déjà cochée
 }
 
