@@ -15,14 +15,10 @@ main h1 {
   text-align: center;
 }
 
-#todo-input {
-  width: 150%;
-}
-
 #todo {
   justify-self: center;
   background-color: blanchedalmond;
-  width: 60vmax;
+  width: 60rem;
   padding: 1rem;
   border-radius: 1rem;
   margin-top: 1rem;
@@ -59,8 +55,8 @@ main h1 {
   list-style: none;
   padding: 5px 10px;
   color: #ffffff;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 2rem;
 }
@@ -78,11 +74,10 @@ li {
   display: flex;
   gap: 1rem;
   align-items: center;
-  flex-shrink: 0;
 }
 
-/*Faire en sorte que le button ne bouge pas quand je click sur la checkBox*/
-.buttonClass {
+/*Je dois faire en sorte que le button ne bouge pas quand je click sur la checkBox*/
+.task-to-do__remove-button {
   background-color: white;
   border: 1px solid #ff4d4d;
   color: #ff4d4d;
@@ -91,7 +86,13 @@ li {
   transition: all 0.5s;
 }
 
-.buttonClass:hover {
+.task-to-do__remove-button:hover {
   background-color: #ff4d4d;
   color: white;
+}
+
+/* Bloque la taille du texte "Completed / Uncompleted" */
+.task-status-container label {
+  width: 6rem;
+  display: inline-block;
 }

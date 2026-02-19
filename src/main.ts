@@ -37,7 +37,7 @@ const displayTask = (text: TaskType) => {
   checkBox.type = 'checkbox'
   newLi.classList.add('task-to-do')
   spanCreated.classList.add('task-status-container')
-  removeButton.classList.add('buttonClass')
+  removeButton.classList.add('task-to-do__remove-button')
 
   const statusBox = () => {
     if (checkBox.checked) {
