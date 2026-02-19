@@ -4,29 +4,71 @@ body {
   margin: 0;
   background-color: burlywood;
 }
+:root {
+  --completed-task-color: greenyellow;
+}
 
 * {
   font-family: Helvetica, Arial, sans-serif;
+}
+main h1 {
+  text-align: center;
 }
 
 #todo {
   justify-self: center;
   background-color: blanchedalmond;
-  padding: 2.2rem;
-  border-radius: 10px;
-  margin-top: 10px;
+  width: 60rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
 }
 
+#cssTodo {
+  display: flex;
+  justify-content: space-between;
+}
+
 #add-todo-button {
   border-style: none;
-  background-color: #00ff7f;
+  background-color: greenyellow;
   border-radius: 0.4rem;
-  padding: 5px, 10px;
-  color: #ffffff;
   font-size: 1rem;
 }
 #error {
   color: red;
+  margin: 0.6rem 0 0 0;
+}
+
+.task-to-do {
+  background-color: cornflowerblue;
+  border-radius: 10px;
+  list-style: none;
+  padding: 5px 10px;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+ul {
+  padding: 0;
+  gap: 10px;
+  margin-bottom: 0px;
+}
+li {
+  margin-top: 0.5rem;
+}
+
+.task-status-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.removeButton {
+  background-color: red;
+  color: #ffffff;
+  padding: 1rem;
 }
