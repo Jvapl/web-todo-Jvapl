@@ -3,7 +3,7 @@ const inputTodo = document.querySelector<HTMLInputElement>('#todo-input')
 const buttonAdd = document.querySelector<HTMLButtonElement>('#add-todo-button')
 const todoElements = document.querySelector<HTMLUListElement>('#todo-elements')
 const errorInput = document.querySelector<HTMLParagraphElement>('#error')
-const taskTodo: TaskType[] = []
+let taskTodo: TaskType[] = []
 
 // Crée un type
 interface TaskType {
@@ -29,12 +29,15 @@ const displayTask = (text: TaskType) => {
   const spanCreated = document.createElement('span')
   const statusCheck = document.createElement('label')
   const checkBox = document.createElement('input')
+  const removeButton = document.createElement('button')
 
   let taskStatusText = 'Uncompleted'
+  removeButton.textContent = 'Remove'
   statusCheck.textContent = taskStatusText
+  checkBox.type = 'checkbox'
   newLi.classList.add('task-to-do')
   spanCreated.classList.add('task-status-container')
-  checkBox.type = 'checkbox'
+  removeButton.classList.add('buttonClass')
 
   const statusBox = () => {
     if (checkBox.checked) {
@@ -54,11 +57,18 @@ const displayTask = (text: TaskType) => {
     text.verify = checkBox.checked
     statusBox()
   })
+  //filtre les id des li avec les boutons que j'ai clické et les sauvegardes
+  removeButton.addEventListener('click', () => {
+    newLi.remove()
+    taskTodo = taskTodo.filter((e) => e.id !== text.id)
+    saveLocalStorage()
+  })
   checkBox.checked = text.verify
   statusBox()
   newLi.textContent = text.name
   newLi.appendChild(spanCreated)
   todoElements.appendChild(newLi)
+  spanCreated.appendChild(removeButton)
   spanCreated.appendChild(statusCheck)
   spanCreated.appendChild(checkBox)
   // je dois crée une variable que verifie si ma checkBox est déjà cochée

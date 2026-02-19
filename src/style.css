@@ -15,15 +15,32 @@ main h1 {
   text-align: center;
 }
 
+#todo-input {
+  width: 150%;
+}
+
 #todo {
   justify-self: center;
   background-color: blanchedalmond;
-  width: 60rem;
+  width: 60vmax;
   padding: 1rem;
   border-radius: 1rem;
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
+}
+#add-todo-button {
+  background-color: white;
+  border: 1px solid lime;
+  color: limegreen;
+  border-radius: 7px;
+  padding: 0.3rem 1rem;
+  transition: all 0.3s;
+}
+
+#add-todo-button:hover {
+  background-color: limegreen;
+  color: white;
 }
 
 #cssTodo {
@@ -31,12 +48,6 @@ main h1 {
   justify-content: space-between;
 }
 
-#add-todo-button {
-  border-style: none;
-  background-color: greenyellow;
-  border-radius: 0.4rem;
-  font-size: 1rem;
-}
 #error {
   color: red;
   margin: 0.6rem 0 0 0;
@@ -50,6 +61,7 @@ main h1 {
   color: #ffffff;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 2rem;
 }
 
@@ -65,10 +77,21 @@ li {
 .task-status-container {
   display: flex;
   gap: 1rem;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-.removeButton {
-  background-color: red;
-  color: #ffffff;
-  padding: 1rem;
+/*Faire en sorte que le button ne bouge pas quand je click sur la checkBox*/
+.buttonClass {
+  background-color: white;
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+  border-radius: 7px;
+  padding: 0.3rem 0.7rem;
+  transition: all 0.5s;
+}
+
+.buttonClass:hover {
+  background-color: #ff4d4d;
+  color: white;
 }
