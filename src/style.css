@@ -25,18 +25,25 @@ main h1 {
   display: flex;
   flex-direction: column;
 }
+#add-todo-button {
+  background-color: white;
+  border: 1px solid lime;
+  color: limegreen;
+  border-radius: 7px;
+  padding: 0.3rem 1rem;
+  transition: all 0.3s;
+}
+
+#add-todo-button:hover {
+  background-color: limegreen;
+  color: white;
+}
 
 #cssTodo {
   display: flex;
   justify-content: space-between;
 }
 
-#add-todo-button {
-  border-style: none;
-  background-color: greenyellow;
-  border-radius: 0.4rem;
-  font-size: 1rem;
-}
 #error {
   color: red;
   margin: 0.6rem 0 0 0;
@@ -48,8 +55,9 @@ main h1 {
   list-style: none;
   padding: 5px 10px;
   color: #ffffff;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
   gap: 2rem;
 }
 
@@ -65,10 +73,26 @@ li {
 .task-status-container {
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
-.removeButton {
-  background-color: red;
-  color: #ffffff;
-  padding: 1rem;
+/*Je dois faire en sorte que le button ne bouge pas quand je click sur la checkBox*/
+.task-to-do__remove-button {
+  background-color: white;
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+  border-radius: 7px;
+  padding: 0.3rem 0.7rem;
+  transition: all 0.5s;
+}
+
+.task-to-do__remove-button:hover {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+/* Bloque la taille du texte "Completed / Uncompleted" */
+.task-status-container label {
+  width: 6rem;
+  display: inline-block;
 }
