@@ -49,7 +49,6 @@ const displayTask = (text: TaskType) => {
   const dateLine = text.date || 'No due date'
   dateLabel.textContent = dateLine || ''
 
-  
   deleteAllTodo.textContent = 'Delete All'
   let taskStatusText = 'Uncompleted'
   removeButton.textContent = 'Remove'
@@ -123,7 +122,7 @@ const addElement = () => {
     errorInput.removeAttribute('hidden')
     return
   }
-  const currentDate = new Date().toISOString().split('T')[0] 
+  const currentDate = new Date().toISOString().split('T')[0]
   const newTask: TaskType = {
     id: Date.now(),
     name: text,
