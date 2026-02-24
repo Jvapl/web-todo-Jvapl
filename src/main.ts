@@ -30,7 +30,9 @@ if (
   )
 }
 if (!dateInput) {
-  throw new Error("This task doens't have Date")
+  throw new Error(
+    "Could't find the 'todo-date-input DOM element. Verify the ID in index.html",
+  )
 }
 
 const saveLocalStorage = () => {
@@ -47,13 +49,12 @@ const displayTask = (text: TaskType) => {
   const dateLabel = document.createElement('p')
   const dateTimes = document.createElement('time')
   const dateLine = text.date || 'No due date'
-  dateLabel.textContent = dateLine || ''
+  dateLabel.textContent = dateLine
 
   deleteAllTodo.textContent = 'Delete All'
   let taskStatusText = 'Uncompleted'
   removeButton.textContent = 'Remove'
   statusCheck.textContent = taskStatusText
-  dateLabel.textContent = dateLine
   checkBox.type = 'checkbox'
   newLi.classList.add('task-to-do')
   dateLabel.classList.add('dateTimeClass')
@@ -92,8 +93,8 @@ const displayTask = (text: TaskType) => {
   dateTimes.appendChild(dateLabel)
   spanCreated.appendChild(dateTimes)
   spanCreated.appendChild(checkBox)
-  todoElements.appendChild(newLi)
   newLi.appendChild(spanCreated)
+  todoElements.appendChild(newLi)
   // je dois crée une variable que verifie si ma checkBox est déjà cochée
 }
 
@@ -119,6 +120,7 @@ if (reload) {
 const addElement = () => {
   const text: string = inputTodo.value.trim()
   if (!text) {
+    errorInput.textContent = 'Please enter a task !!'
     errorInput.removeAttribute('hidden')
     return
   }
@@ -129,9 +131,11 @@ const addElement = () => {
     verify: false,
     date: dateInput.value || 'No due date',
   }
-  if (dateInput.value < currentDate) {
-    alert('cannot be in past')
-    dateInput.textContent = ''
+  if (!dateInput.value) {
+    dateInput.textContent = 'No due date'
+  } else if (dateInput.value < currentDate) {
+    errorInput.textContent = 'Chose a valid date !!'
+    errorInput.removeAttribute('hidden')
     return
   }
   errorInput.setAttribute('hidden', '')
