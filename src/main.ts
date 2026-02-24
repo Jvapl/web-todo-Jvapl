@@ -1,8 +1,9 @@
 import './style.css'
-const inputTodo = document.querySelector<HTMLInputElement>('#todo-input')
 const buttonAdd = document.querySelector<HTMLButtonElement>('#add-todo-button')
 const todoElements = document.querySelector<HTMLUListElement>('#todo-elements')
 const errorInput = document.querySelector<HTMLParagraphElement>('#error')
+const inputTodo = document.querySelector<HTMLInputElement>('#todo-input')
+const dateInput = document.querySelector<HTMLInputElement>('#todo-date-input')
 const deleteAllTodo = document.querySelector<HTMLButtonElement>(
   '#task-to-do__remove-All-button',
 )
@@ -13,6 +14,7 @@ interface TaskType {
   id: number
   name: string
   verify: boolean
+  date: string
 }
 
 // Check si touts mes elements existent vraiment dans mon HTML
@@ -27,6 +29,11 @@ if (
     "Didn't find one or many DOM elements. Verify the IDs from index.html.", //
   )
 }
+if (!dateInput) {
+  throw new Error(
+    "Could't find the 'todo-date-input DOM element. Verify the ID in index.html",
+  )
+}
 
 const saveLocalStorage = () => {
   localStorage.setItem('taskTodo', JSON.stringify(taskTodo))
@@ -39,12 +46,18 @@ const displayTask = (text: TaskType) => {
   const statusCheck = document.createElement('label')
   const checkBox = document.createElement('input')
   const removeButton = document.createElement('button')
+  const dateLabel = document.createElement('p')
+  const dateTimes = document.createElement('time')
+  const dateLine = text.date || 'No due date'
+  dateLabel.textContent = dateLine
 
+  deleteAllTodo.textContent = 'Delete All'
   let taskStatusText = 'Uncompleted'
   removeButton.textContent = 'Remove'
   statusCheck.textContent = taskStatusText
   checkBox.type = 'checkbox'
   newLi.classList.add('task-to-do')
+  dateLabel.classList.add('dateTimeClass')
   spanCreated.classList.add('task-status-container')
   removeButton.classList.add('task-to-do__remove-button')
 
@@ -75,11 +88,13 @@ const displayTask = (text: TaskType) => {
   checkBox.checked = text.verify
   statusBox()
   newLi.textContent = text.name
-  newLi.appendChild(spanCreated)
-  todoElements.appendChild(newLi)
   spanCreated.appendChild(removeButton)
   spanCreated.appendChild(statusCheck)
+  dateTimes.appendChild(dateLabel)
+  spanCreated.appendChild(dateTimes)
   spanCreated.appendChild(checkBox)
+  newLi.appendChild(spanCreated)
+  todoElements.appendChild(newLi)
   // je dois crée une variable que verifie si ma checkBox est déjà cochée
 }
 
@@ -105,18 +120,28 @@ if (reload) {
 const addElement = () => {
   const text: string = inputTodo.value.trim()
   if (!text) {
+    errorInput.textContent = 'Please enter a task !!'
     errorInput.removeAttribute('hidden')
     return
   }
-
+  const currentDate = new Date().toISOString().split('T')[0]
   const newTask: TaskType = {
     id: Date.now(),
     name: text,
     verify: false,
+    date: dateInput.value || 'No due date',
+  }
+  if (!dateInput.value) {
+    dateInput.textContent = 'No due date'
+  } else if (dateInput.value < currentDate) {
+    errorInput.textContent = 'Chose a valid date !!'
+    errorInput.removeAttribute('hidden')
+    return
   }
   errorInput.setAttribute('hidden', '')
   displayTask(newTask)
   taskTodo.push(newTask)
+  dateInput.value = ''
   inputTodo.value = ''
   const tasksJson = JSON.stringify(taskTodo)
   localStorage.setItem('taskTodo', tasksJson)
@@ -137,7 +162,6 @@ let isConfirming = false
 deleteAllTodo.addEventListener('click', () => {
   const warningTimeout = () => {
     taskTodo.length = 0
-    todoElements.innerHTML = ''
     saveLocalStorage()
     isConfirming = false
     deleteAllTodo.textContent = 'Deleted all'
@@ -147,8 +171,9 @@ deleteAllTodo.addEventListener('click', () => {
     isConfirming = true
     deleteAllTodo.textContent = 'Are you sure ?'
     deleteAllTodo.classList.add('warning')
-    setTimeout(warningTimeout, 5000)
+    setTimeout(warningTimeout, 3000)
   } else {
     warningTimeout()
+    todoElements.innerHTML = ''
   }
 })
