@@ -38,6 +38,27 @@ if (!dateInput) {
 const saveLocalStorage = () => {
   localStorage.setItem('taskTodo', JSON.stringify(taskTodo))
 }
+//Regarde si il y a une grande difference entre la date actuelle et la date qui a été input
+const colorChangeDays = (selectedDate: string) => {
+  const colorDay = ['#FF0000', '#FF7F00', '#FFFF00', '#008000']
+
+  if (selectedDate && selectedDate !== 'No due date') {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0) //mets l'heure a 00:00
+
+    const target = new Date(selectedDate)
+    target.setHours(0, 0, 0, 0)
+
+    const diffTime = target.getTime() - today.getTime()
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+    if (diffDays < 0) return colorDay[0]
+    if (diffDays === 0) return colorDay[1]
+    if (diffDays <= 4) return colorDay[2]
+    return colorDay[3]
+  }
+  return ''
+}
 
 // crée ma todo comme une liste
 const displayTask = (text: TaskType) => {
@@ -60,6 +81,11 @@ const displayTask = (text: TaskType) => {
   dateLabel.classList.add('dateTimeClass')
   spanCreated.classList.add('task-status-container')
   removeButton.classList.add('task-to-do__remove-button')
+
+  const taskColor = colorChangeDays(text.date)
+  if (taskColor) {
+    newLi.style.backgroundColor = taskColor
+  }
 
   const statusBox = () => {
     if (checkBox.checked) {
@@ -95,12 +121,9 @@ const displayTask = (text: TaskType) => {
   spanCreated.appendChild(checkBox)
   newLi.appendChild(spanCreated)
   todoElements.appendChild(newLi)
-  // je dois crée une variable que verifie si ma checkBox est déjà cochée
 }
 
 // Mon reload est pour que quand ça reload la page ça recharge tout
-// ce que le user a input stocké dans le localStorage et envoie aussi une erreur
-// quand il n'arrive pas a faire ça.
 const reload = localStorage.getItem('taskTodo')
 if (reload) {
   try {
@@ -115,8 +138,6 @@ if (reload) {
   }
 }
 
-// J'ajoute un element comme une liste avec ce que l'user a input et je transforme
-// ce qu'il a ecrit dans l'input en JSON pour stoquer dans localStorage.
 const addElement = () => {
   const text: string = inputTodo.value.trim()
   if (!text) {
@@ -124,6 +145,7 @@ const addElement = () => {
     errorInput.removeAttribute('hidden')
     return
   }
+
   const currentDate = new Date().toISOString().split('T')[0]
   const newTask: TaskType = {
     id: Date.now(),
@@ -131,9 +153,9 @@ const addElement = () => {
     verify: false,
     date: dateInput.value || 'No due date',
   }
-  if (!dateInput.value) {
-    dateInput.textContent = 'No due date'
-  } else if (dateInput.value < currentDate) {
+
+  // verifie si la date est valide.
+  if (dateInput.value && dateInput.value < currentDate) {
     errorInput.textContent = 'Chose a valid date !!'
     errorInput.removeAttribute('hidden')
     return
@@ -147,7 +169,6 @@ const addElement = () => {
   localStorage.setItem('taskTodo', tasksJson)
 }
 
-// Les deux principaux "boutons" pour que quand je clique ça execute la fonction et ajoute les todos.
 inputTodo.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
     addElement()
@@ -164,8 +185,6 @@ deleteAllTodo.addEventListener('click', () => {
     taskTodo.length = 0
     saveLocalStorage()
     isConfirming = false
-    deleteAllTodo.textContent = 'Deleted all'
-    deleteAllTodo.classList.remove('warning')
   }
   if (!isConfirming) {
     isConfirming = true
