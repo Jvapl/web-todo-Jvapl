@@ -42,7 +42,7 @@ main h1 {
 }
 
 #add-todo-button:hover {
-  background-color: var(--completed-task-color);
+  background-color: var(--overdued-color-green);
   color: var(--basic-color-changer-white);
 }
 
@@ -80,10 +80,6 @@ li {
 
 #todo-input {
   border-radius: 7px;
-}
-
-#todo-input::selection {
-  border: blue;
 }
 
 .task-status-container {
@@ -144,13 +140,16 @@ li {
 #overdue-message {
   background-color: var(--overdued-color-red);
   color: var(--basic-color-changer-white);
-  padding: 1rem;
+  padding: 0.5rem 2rem;
   font-weight: bold;
   font-size: 1.4rem;
-  margin: 0.2rem;
   width: 15rem;
-  text-align: center;
   border-radius: 12rem;
-  justify-self: center;
-  margin-bottom: 40px;
+  text-align: center;
+}
+
+#headerTodo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
