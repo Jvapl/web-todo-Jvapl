@@ -1,4 +1,6 @@
 import './style.css'
+const overdueMsg =
+  document.querySelector<HTMLParagraphElement>('#overdue-message')
 const buttonAdd = document.querySelector<HTMLButtonElement>('#add-todo-button')
 const todoElements = document.querySelector<HTMLUListElement>('#todo-elements')
 const errorInput = document.querySelector<HTMLParagraphElement>('#error')
@@ -23,7 +25,8 @@ if (
   !buttonAdd ||
   !todoElements ||
   !errorInput ||
-  !deleteAllTodo
+  !deleteAllTodo ||
+  !overdueMsg
 ) {
   throw new Error(
     "Didn't find one or many DOM elements. Verify the IDs from index.html.", //
@@ -40,7 +43,12 @@ const saveLocalStorage = () => {
 }
 //Regarde si il y a une grande difference entre la date actuelle et la date qui a été input
 const colorChangeDays = (selectedDate: string) => {
-  const colorDay = ['#FF0000', '#FF7F00', '#FFFF00', '#008000']
+  const colorDay = [
+    'var(--overdued-color-red)',
+    'var(--overdued-color-orange)',
+    'var(--overdued-color-yellow)',
+    'var(--overdued-color-green)',
+  ]
 
   if (selectedDate && selectedDate !== 'No due date') {
     const today = new Date()
@@ -51,10 +59,30 @@ const colorChangeDays = (selectedDate: string) => {
 
     const diffTime = target.getTime() - today.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
-    if (diffDays < 0) return colorDay[0]
-    if (diffDays === 0) return colorDay[1]
-    if (diffDays <= 4) return colorDay[2]
+    const overdueMsgTester = () => {
+      if(taskTodo.length === 0){
+        overdueMsg.textContent = 'No overdue tasks'
+        overdueMsg.style.background = 'var(--overdued-color-red)'
+        return
+      }
+      if (diffDays < 0 || diffDays > 4) {
+        overdueMsg.textContent = 'No overdue tasks'
+        overdueMsg.style.background = 'var(--overdued-color-red)'
+      } else {
+        overdueMsg.textContent = '⚠️ Overdue task  ⚠️'
+      }
+    }
+    if (diffDays < 0) {
+      overdueMsgTester()
+      return colorDay[0]
+    }
+    overdueMsgTester()
+    if (diffDays === 0) {
+      return colorDay[1]
+    }
+    if (diffDays <= 4) {
+      return colorDay[2]
+    }
     return colorDay[3]
   }
   return ''
@@ -185,6 +213,7 @@ deleteAllTodo.addEventListener('click', () => {
     taskTodo.length = 0
     saveLocalStorage()
     isConfirming = false
+    deleteAllTodo.textContent = 'Delete All'
   }
   if (!isConfirming) {
     isConfirming = true
