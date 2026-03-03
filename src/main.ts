@@ -1,12 +1,15 @@
 import './style.css'
+const deleteAllTodo = document.querySelector<HTMLButtonElement>(
+  '#task-to-do__remove-All-button',
+)
+const overdueMsg =
+  document.querySelector<HTMLParagraphElement>('#overdue-message')
 const buttonAdd = document.querySelector<HTMLButtonElement>('#add-todo-button')
 const todoElements = document.querySelector<HTMLUListElement>('#todo-elements')
 const errorInput = document.querySelector<HTMLParagraphElement>('#error')
 const inputTodo = document.querySelector<HTMLInputElement>('#todo-input')
 const dateInput = document.querySelector<HTMLInputElement>('#todo-date-input')
-const deleteAllTodo = document.querySelector<HTMLButtonElement>(
-  '#task-to-do__remove-All-button',
-)
+
 let taskTodo: TaskType[] = []
 
 // Crée un type
@@ -17,16 +20,16 @@ interface TaskType {
   date: string
 }
 
-// Check si touts mes elements existent vraiment dans mon HTML
 if (
   !inputTodo ||
   !buttonAdd ||
   !todoElements ||
   !errorInput ||
-  !deleteAllTodo
+  !deleteAllTodo ||
+  !overdueMsg
 ) {
   throw new Error(
-    "Didn't find one or many DOM elements. Verify the IDs from index.html.", //
+    "Didn't find one or many DOM elements. Verify the IDs from index.html.",
   )
 }
 if (!dateInput) {
@@ -36,22 +39,47 @@ if (!dateInput) {
 }
 
 const saveLocalStorage = () => {
-  localStorage.setItem('taskTodo', JSON.stringify(taskTodo))
+  localStorage.setItem('taskTodo', JSON.stringify(taskTodo)) // Je transforme mes taskTodo en string et je le mets en format JSON dans mon local storage
 }
-//Regarde si il y a une grande difference entre la date actuelle et la date qui a été input
+const updateOverdueAlert = () => {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0) // mets l'heure a 00:00
+
+  const UrgentOverdue = taskTodo.some((task) => {
+    if (!task.date || task.date === 'No due date') return false
+
+    const target = new Date(task.date)
+    target.setHours(0, 0, 0, 0)
+
+    const diffTime = target.getTime() - today.getTime()
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) // arrondi mon nombre en jours
+
+    return diffDays <= 4 && !task.verify //return la differance entre le nombre choisi et le 4
+  })
+
+  if (UrgentOverdue) {
+    overdueMsg.removeAttribute('hidden')
+  } else {
+    overdueMsg.setAttribute('hidden', '')
+  }
+}
 const colorChangeDays = (selectedDate: string) => {
-  const colorDay = ['#FF0000', '#FF7F00', '#FFFF00', '#008000']
+  const colorDay = [
+    'var(--overdued-color-red)', //crée une variable avec une couleur OBS(c'est plus facile si je veux changer de couleur après)
+    'var(--overdued-color-orange)',
+    'var(--overdued-color-yellow)',
+    'var(--overdued-color-green)',
+  ]
 
   if (selectedDate && selectedDate !== 'No due date') {
     const today = new Date()
-    today.setHours(0, 0, 0, 0) //mets l'heure a 00:00
+    today.setHours(0, 0, 0, 0)
 
     const target = new Date(selectedDate)
     target.setHours(0, 0, 0, 0)
 
     const diffTime = target.getTime() - today.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
     if (diffDays < 0) return colorDay[0]
     if (diffDays === 0) return colorDay[1]
     if (diffDays <= 4) return colorDay[2]
@@ -62,7 +90,7 @@ const colorChangeDays = (selectedDate: string) => {
 
 // crée ma todo comme une liste
 const displayTask = (text: TaskType) => {
-  const newLi = document.createElement('li') //label + input("checkBox") -> span + les li
+  const newLi = document.createElement('li')
   const spanCreated = document.createElement('span')
   const statusCheck = document.createElement('label')
   const checkBox = document.createElement('input')
@@ -92,24 +120,23 @@ const displayTask = (text: TaskType) => {
       taskStatusText = 'Completed'
       statusCheck.textContent = taskStatusText
       spanCreated.style.color = 'var(--completed-task-color)'
-      saveLocalStorage()
     } else {
       taskStatusText = 'Uncompleted'
       statusCheck.textContent = taskStatusText
       spanCreated.style.color = ''
-      saveLocalStorage()
     }
-  }
-
-  checkBox.addEventListener('change', () => {
     text.verify = checkBox.checked
+    saveLocalStorage()
+    updateOverdueAlert()
+  }
+  checkBox.addEventListener('change', () => {
     statusBox()
   })
-  //filtre les id des li avec les boutons que j'ai clické et les sauvegardes
   removeButton.addEventListener('click', () => {
     newLi.remove()
     taskTodo = taskTodo.filter((e) => e.id !== text.id)
     saveLocalStorage()
+    updateOverdueAlert()
   })
   checkBox.checked = text.verify
   statusBox()
@@ -132,6 +159,7 @@ if (reload) {
     taskTodo.forEach((taskText) => {
       displayTask(taskText)
     })
+    updateOverdueAlert()
   } catch (e) {
     console.error('Failed to parse tasks from localStorage', e)
     localStorage.removeItem('taskTodo')
@@ -161,12 +189,12 @@ const addElement = () => {
     return
   }
   errorInput.setAttribute('hidden', '')
-  displayTask(newTask)
   taskTodo.push(newTask)
+  displayTask(newTask)
   dateInput.value = ''
   inputTodo.value = ''
-  const tasksJson = JSON.stringify(taskTodo)
-  localStorage.setItem('taskTodo', tasksJson)
+  saveLocalStorage()
+  updateOverdueAlert()
 }
 
 inputTodo.addEventListener('keydown', (event) => {
@@ -185,6 +213,8 @@ deleteAllTodo.addEventListener('click', () => {
     taskTodo.length = 0
     saveLocalStorage()
     isConfirming = false
+    deleteAllTodo.textContent = 'Delete All'
+    updateOverdueAlert()
   }
   if (!isConfirming) {
     isConfirming = true
