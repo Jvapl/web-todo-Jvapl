@@ -60,7 +60,7 @@ const colorChangeDays = (selectedDate: string) => {
     const diffTime = target.getTime() - today.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
     const overdueMsgTester = () => {
-      if(taskTodo.length === 0){
+      if (taskTodo.length === 0) {
         overdueMsg.textContent = 'No overdue tasks'
         overdueMsg.style.background = 'var(--overdued-color-red)'
         return
