@@ -27,7 +27,7 @@ export const addElement = () => {
 
   // verifie si la date est valide.
   if (dateInput.value && dateInput.value < currentDate) {
-    errorInput.textContent = 'Chose a valid date !!'
+    errorInput.textContent = 'Choose a valid date !!'
     errorInput.removeAttribute('hidden')
     return
   }

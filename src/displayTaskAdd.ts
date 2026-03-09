@@ -55,8 +55,11 @@ export const displayTask = (text: TaskType) => {
   })
   removeButton.addEventListener('click', () => {
     newLi.remove()
-    const result = taskTodo.filter((e) => e.id !== text.id)
-    taskTodo = result
+    const taskIndex = taskTodo.findIndex((e) => e.id !== text.id) // trouve le task et le
+    //remove directement sur place
+    if (taskIndex > -1) {
+      taskTodo.splice(taskIndex, 1)
+    }
     saveLocalStorage()
     updateOverdueAlert()
   })

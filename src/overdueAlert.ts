@@ -4,7 +4,7 @@ export const updateOverdueAlert = () => {
   const overdueMsg =
     document.querySelector<HTMLParagraphElement>('#overdue-message')
   if (!overdueMsg) {
-    throw new Error('asdasdasd')
+    throw new Error("Could not find the '#overdue-message' element in the DOM.")
   }
 
   const today = new Date()
