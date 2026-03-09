@@ -32,7 +32,7 @@ main h1 {
   flex-direction: column;
 }
 #add-todo-button {
-  background-color: white;
+  background-color: var(--basic-color-changer-white);
   border: 1px solid var(--overdued-color-green);
   color: var(--add-button-color-green);
   border-radius: 7px;
