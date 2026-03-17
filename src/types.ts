@@ -1,6 +1,7 @@
-export interface TaskType {
-  id: number
-  name: string
-  verify: boolean
-  date: string
+export interface newTask {
+  id?: number
+  title: string
+  content: string
+  done: boolean
+  due_date: string | null
 }

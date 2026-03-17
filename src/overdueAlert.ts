@@ -12,15 +12,15 @@ export const updateOverdueAlert = () => {
 
   const UrgentOverdue = taskTodo.some((task) => {
     // .some Est une commende qui fais le cacul et return true ou false
-    if (!task.date || task.date === 'No due date') return false
+    if (!task.due_date || task.due_date === 'No due date') return false
 
-    const target = new Date(task.date)
+    const target = new Date(task.due_date)
     target.setHours(0, 0, 0, 0)
 
     const diffTime = target.getTime() - today.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) // arrondi mon nombre en jours
 
-    return diffDays <= 4 && !task.verify //return que les nombres qui sont plus petit ou egaux a 4 sinon il retourne "no due date" si zero inputDate
+    return diffDays <= 4 && !task.done //return que les nombres qui sont plus petit ou egaux a 4 sinon il retourne "no due date" si zero inputDate
   })
 
   if (UrgentOverdue) {

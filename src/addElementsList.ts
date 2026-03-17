@@ -1,10 +1,10 @@
+import { postDataAPI } from './dataFromAPI'
 import { displayTask } from './displayTaskAdd'
 import { dateInput, errorInput, inputTodo, taskTodo } from './main'
 import { updateOverdueAlert } from './overdueAlert'
-import { saveLocalStorage } from './saveToLocal'
-import type { TaskType } from './types'
+import type { newTask } from './types'
 
-export const addElement = () => {
+export async function addElement() {
   if (!inputTodo || !errorInput || !dateInput) {
     throw new Error(
       "Didn't find one or many DOM elements. Verify the IDs from index.html.",
@@ -18,24 +18,28 @@ export const addElement = () => {
   }
 
   const currentDate = new Date().toISOString().split('T')[0]
-  const newTask: TaskType = {
-    id: Date.now(),
-    name: text,
-    verify: false,
-    date: dateInput.value || 'No due date',
-  }
-
-  // verifie si la date est valide.
   if (dateInput.value && dateInput.value < currentDate) {
     errorInput.textContent = 'Choose a valid date !!'
     errorInput.removeAttribute('hidden')
     return
   }
   errorInput.setAttribute('hidden', '')
-  taskTodo.push(newTask)
-  displayTask(newTask)
-  dateInput.value = ''
-  inputTodo.value = ''
-  saveLocalStorage()
-  updateOverdueAlert()
+  const taskToSent: newTask = {
+    title: text,
+    content: text,
+    done: false,
+    due_date: dateInput.value || null,
+  }
+  try {
+    const fromServer = await postDataAPI(taskToSent)
+    const finalTask = fromServer.id ? fromServer : taskToSent //Demande si l'objets qu'on a
+    //reçu a un id si oui envoie fromServer sinon taskToSent
+    taskTodo.push(finalTask)
+    displayTask(finalTask)
+    dateInput.value = ''
+    inputTodo.value = ''
+    updateOverdueAlert()
+  } catch (error) {
+    console.error("the task wasn't add to API", error)
+  }
 }
