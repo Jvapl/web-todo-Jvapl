@@ -1,4 +1,4 @@
-import type { newTask } from './types'
+import type { NewTask } from './types'
 
 const url = 'https://api.todos.in.jt-lab.ch/todos'
 
@@ -6,7 +6,7 @@ const url = 'https://api.todos.in.jt-lab.ch/todos'
 // ## API Ajouter une tache à l'API -----
 // envoie une nouvelle tache à l'API pour l'enregistrer en base de données
 
-export async function postDataAPI(taskToSent: newTask) {
+export async function postDataAPI(taskToSent: NewTask) {
   // L'adresse pour les taches
 
   const reponse = await fetch(url, {
@@ -45,7 +45,7 @@ export async function appelerAPI() {
 
 // ## API Suprimer une tache de l'API -----
 
-export async function deleteAPI(tasks: newTask[]) {
+export async function deleteAPI(tasks: NewTask[]) {
   const deletePromises = tasks.map((task) =>
     fetch(`${url}?id=eq.${task.id}`, {
       //Si j'ai bien compris je prends url en format postGres et je prends sur les task.id
@@ -62,13 +62,18 @@ export async function deleteAPI(tasks: newTask[]) {
 // ## API Modifier une tache de l'API -----
 
 export async function updateAPI(id: number, done: boolean) {
-  await fetch(`${url}?id=eq.${id}`, {
+  const response = await fetch(`${url}?id=eq.${id}`, {
     method: 'PATCH', //update l'infomation avec l'id
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ done }),
   })
+  if (!response.ok) {
+    const errorText = await response.text()
+    console.error(`Failed to update task ${id}:`, errorText)
+    throw new Error(`Failed to update task ${id}`)
+  }
 }
 //async est une commende qui dit a mon code que cette function prendras plus de temps
 //await est une commende qui dit a mon code d'attendre un reponse et aussi fetch

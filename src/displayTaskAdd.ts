@@ -2,9 +2,9 @@ import { colorChangeDays } from './changeColorsDaily'
 import { deleteAPI, updateAPI } from './dataFromAPI'
 import { deleteAllTodo, taskTodo, todoElements } from './main'
 import { updateOverdueAlert } from './overdueAlert'
-import type { newTask } from './types'
+import type { NewTask } from './types'
 
-export const displayTask = (text: newTask) => {
+export const displayTask = (text: NewTask) => {
   // je pourrais faire en sorte de transformer ceci en import
   if (!todoElements || !deleteAllTodo) {
     throw new Error(
@@ -52,27 +52,39 @@ export const displayTask = (text: newTask) => {
   }
   checkBox.addEventListener('change', async () => {
     statusBox()
-    if (text.id !== undefined) {
-      text.done = checkBox.checked
+    if (text.id === undefined) return
+
+    const originalState = text.done
+    text.done = checkBox.checked
+
+    try {
       await updateAPI(text.id, checkBox.checked)
+    } catch (error) {
+      console.error('Failed to update task status:', error)
+      text.done = originalState
+      checkBox.checked = originalState
+      statusBox()
     }
   })
 
   removeButton.addEventListener('click', async () => {
-    await deleteAPI([text])
-    newLi.remove()
-    const taskIndex = taskTodo.findIndex((e) => e.id === text.id) // trouver la tâche par ID
-    if (taskIndex > -1) {
-      taskTodo.splice(taskIndex, 1)
+    try {
+      await deleteAPI([text])
+      newLi.remove()
+      const taskIndex = taskTodo.findIndex((e) => e.id === text.id) // trouver la tâche par ID
+      if (taskIndex > -1) {
+        taskTodo.splice(taskIndex, 1)
+      }
+      updateOverdueAlert()
+    } catch (error) {
+      console.error('Failed to delete task:', error)
     }
-    updateOverdueAlert()
   })
   checkBox.checked = text.done
   statusBox()
   const taskName = document.createElement('span')
   taskName.textContent = text.title
   newLi.appendChild(taskName)
-  newLi.appendChild(spanCreated)
   spanCreated.appendChild(removeButton)
   spanCreated.appendChild(statusCheck)
   dateTimes.appendChild(dateLabel)

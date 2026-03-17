@@ -2,7 +2,7 @@ import { appelerAPI } from './dataFromAPI'
 import { displayTask } from './displayTaskAdd'
 import { taskTodo, todoElements } from './main'
 import { updateOverdueAlert } from './overdueAlert'
-import type { newTask } from './types'
+import type { NewTask } from './types'
 
 export const reloadPage = async () => {
   if (!todoElements) {
@@ -11,10 +11,12 @@ export const reloadPage = async () => {
     )
   }
   try {
-    const savedTasks: newTask[] = await appelerAPI()
-    taskTodo.length = 0
-    todoElements.innerHTML = ''
-    taskTodo.push(...savedTasks)
+    const savedTasks: NewTask[] | undefined = await appelerAPI() //comme ça ne peut pas retourner undefined
+    if (savedTasks) {
+      taskTodo.length = 0
+      todoElements.innerHTML = ''
+      taskTodo.push(...savedTasks)
+    }
     taskTodo.forEach((taskText) => {
       displayTask(taskText)
     })

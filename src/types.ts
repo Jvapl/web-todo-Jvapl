@@ -1,4 +1,4 @@
-export interface newTask {
+export interface NewTask {
   id?: number
   title: string
   content: string

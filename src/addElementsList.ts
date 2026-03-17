@@ -2,7 +2,7 @@ import { postDataAPI } from './dataFromAPI'
 import { displayTask } from './displayTaskAdd'
 import { dateInput, errorInput, inputTodo, taskTodo } from './main'
 import { updateOverdueAlert } from './overdueAlert'
-import type { newTask } from './types'
+import type { NewTask } from './types'
 
 export async function addElement() {
   if (!inputTodo || !errorInput || !dateInput) {
@@ -24,7 +24,7 @@ export async function addElement() {
     return
   }
   errorInput.setAttribute('hidden', '')
-  const taskToSent: newTask = {
+  const taskToSent: NewTask = {
     title: text,
     content: text,
     done: false,
@@ -32,7 +32,12 @@ export async function addElement() {
   }
   try {
     const fromServer = await postDataAPI(taskToSent)
-    const finalTask = fromServer.id ? fromServer : taskToSent //Demande si l'objets qu'on a
+    const finalTask = fromServer.id ? fromServer : taskToSent
+    if (!finalTask) {
+      console.error('Failed to save the task to the server.')
+      return
+    }
+    //Demande si l'objets qu'on a
     //reçu a un id si oui envoie fromServer sinon taskToSent
     taskTodo.push(finalTask)
     displayTask(finalTask)

@@ -3,7 +3,7 @@ import { addElement } from './addElementsList'
 import { deleteAPI } from './dataFromAPI'
 import { updateOverdueAlert } from './overdueAlert'
 import { reloadPage } from './reloadPages'
-import type { newTask } from './types'
+import type { NewTask } from './types'
 
 export const deleteAllTodo = document.querySelector<HTMLButtonElement>(
   '#task-to-do__remove-All-button',
@@ -17,7 +17,7 @@ export const inputTodo = document.querySelector<HTMLInputElement>('#todo-input')
 export const dateInput =
   document.querySelector<HTMLInputElement>('#todo-date-input')
 
-export const taskTodo: newTask[] = []
+export const taskTodo: NewTask[] = []
 
 // Crée un type
 if (
@@ -51,9 +51,13 @@ let isConfirming = false
 
 deleteAllTodo.addEventListener('click', async () => {
   const warningTimeout = async () => {
-    await deleteAPI(taskTodo) //trouver l'id stocké dans ma base de donnée et essayer de delete
-    //  les informations stockée
-    taskTodo.length = 0
+    try {
+      await deleteAPI(taskTodo) //trouver l'id stocké dans ma base de donnée et essayer de delete
+      //  les informations stockée
+      taskTodo.length = 0
+    } catch (error) {
+      console.error('Failed to delete all tasks:', error)
+    }
     isConfirming = false
     deleteAllTodo.textContent = 'Delete All'
     todoElements.innerHTML = ''
