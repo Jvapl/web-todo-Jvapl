@@ -1,9 +1,9 @@
 import './style.css'
 import { addElement } from './addElementsList'
+import { deleteAPI } from './dataFromAPI'
 import { updateOverdueAlert } from './overdueAlert'
 import { reloadPage } from './reloadPages'
-import { saveLocalStorage } from './saveToLocal'
-import type { TaskType } from './types'
+import type { NewTask } from './types'
 
 export const deleteAllTodo = document.querySelector<HTMLButtonElement>(
   '#task-to-do__remove-All-button',
@@ -17,7 +17,7 @@ export const inputTodo = document.querySelector<HTMLInputElement>('#todo-input')
 export const dateInput =
   document.querySelector<HTMLInputElement>('#todo-date-input')
 
-export const taskTodo: TaskType[] = []
+export const taskTodo: NewTask[] = []
 
 // Crée un type
 if (
@@ -45,19 +45,22 @@ inputTodo.addEventListener('keydown', (event) => {
     addElement()
   }
 })
-buttonAdd.addEventListener('click', () => {
-  addElement()
-})
+buttonAdd.addEventListener('click', addElement)
 
 let isConfirming = false
 
-deleteAllTodo.addEventListener('click', () => {
-  const warningTimeout = () => {
-    taskTodo.length = 0
-    saveLocalStorage()
+deleteAllTodo.addEventListener('click', async () => {
+  const warningTimeout = async () => {
+    try {
+      await deleteAPI(taskTodo) //trouver l'id stocké dans ma base de donnée et essayer de delete
+      //  les informations stockée
+      taskTodo.length = 0
+    } catch (error) {
+      console.error('Failed to delete all tasks:', error)
+    }
     isConfirming = false
     deleteAllTodo.textContent = 'Delete All'
-    updateOverdueAlert()
+    todoElements.innerHTML = ''
   }
   if (!isConfirming) {
     isConfirming = true

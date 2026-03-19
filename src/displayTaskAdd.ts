@@ -1,10 +1,10 @@
 import { colorChangeDays } from './changeColorsDaily'
+import { deleteAPI, updateAPI } from './dataFromAPI'
 import { deleteAllTodo, taskTodo, todoElements } from './main'
 import { updateOverdueAlert } from './overdueAlert'
-import { saveLocalStorage } from './saveToLocal'
-import type { TaskType } from './types'
+import type { NewTask } from './types'
 
-export const displayTask = (text: TaskType) => {
+export const displayTask = (text: NewTask) => {
   // je pourrais faire en sorte de transformer ceci en import
   if (!todoElements || !deleteAllTodo) {
     throw new Error(
@@ -18,7 +18,7 @@ export const displayTask = (text: TaskType) => {
   const removeButton = document.createElement('button')
   const dateLabel = document.createElement('p')
   const dateTimes = document.createElement('time')
-  const dateLine = text.date || 'No due date'
+  const dateLine = text.due_date ?? 'No due date'
   dateLabel.textContent = dateLine
 
   deleteAllTodo.textContent = 'Delete All'
@@ -31,12 +31,14 @@ export const displayTask = (text: TaskType) => {
   spanCreated.classList.add('task-status-container')
   removeButton.classList.add('task-to-do__remove-button')
 
-  const taskColor = colorChangeDays(text.date)
-  if (taskColor) {
-    newLi.style.backgroundColor = taskColor
+  if (text.due_date) {
+    const taskColor = colorChangeDays(text.due_date)
+    if (taskColor) {
+      newLi.style.backgroundColor = taskColor
+    }
   }
 
-  const statusBox = () => {
+  const statusBox = async () => {
     if (checkBox.checked) {
       taskStatusText = 'Completed'
       statusCheck.textContent = taskStatusText
@@ -46,26 +48,43 @@ export const displayTask = (text: TaskType) => {
       statusCheck.textContent = taskStatusText
       spanCreated.style.color = ''
     }
-    text.verify = checkBox.checked
-    saveLocalStorage()
     updateOverdueAlert()
   }
-  checkBox.addEventListener('change', () => {
+  checkBox.addEventListener('change', async () => {
     statusBox()
-  })
-  removeButton.addEventListener('click', () => {
-    newLi.remove()
-    const taskIndex = taskTodo.findIndex((e) => e.id !== text.id) // trouve le task et le
-    //remove directement sur place
-    if (taskIndex > -1) {
-      taskTodo.splice(taskIndex, 1)
+    if (text.id === undefined) return
+
+    const originalState = text.done
+    text.done = checkBox.checked
+
+    try {
+      await updateAPI(text.id, checkBox.checked)
+    } catch (error) {
+      console.error('Failed to update task status:', error)
+      text.done = originalState
+      checkBox.checked = originalState
+      statusBox()
     }
-    saveLocalStorage()
-    updateOverdueAlert()
   })
-  checkBox.checked = text.verify
+
+  removeButton.addEventListener('click', async () => {
+    try {
+      await deleteAPI([text])
+      newLi.remove()
+      const taskIndex = taskTodo.findIndex((e) => e.id === text.id) // trouver la tâche par ID
+      if (taskIndex > -1) {
+        taskTodo.splice(taskIndex, 1)
+      }
+      updateOverdueAlert()
+    } catch (error) {
+      console.error('Failed to delete task:', error)
+    }
+  })
+  checkBox.checked = text.done
   statusBox()
-  newLi.textContent = text.name
+  const taskName = document.createElement('span')
+  taskName.textContent = text.title
+  newLi.appendChild(taskName)
   spanCreated.appendChild(removeButton)
   spanCreated.appendChild(statusCheck)
   dateTimes.appendChild(dateLabel)
