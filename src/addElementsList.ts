@@ -4,7 +4,7 @@ import { dateInput, errorInput, inputTodo, taskTodo } from './main'
 import { updateOverdueAlert } from './overdueAlert'
 import type { NewTask } from './types'
 
-export const addElement = async () =>{
+export const addElement = async () => {
   if (!inputTodo || !errorInput || !dateInput) {
     throw new Error(
       "Didn't find one or many DOM elements. Verify the IDs from index.html.",

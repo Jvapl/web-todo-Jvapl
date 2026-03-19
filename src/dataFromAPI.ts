@@ -24,10 +24,10 @@ export async function postDataAPI(taskToSent: NewTask) {
     throw new Error('Undefined') // dit au code que c'est faux et return rien
   }
 
-  const resultat = await reponse.json();
-  
-  if (!resultat) throw new Error('Undefined');
-  return resultat;
+  const resultat = await reponse.json()
+
+  if (!resultat) throw new Error('Undefined')
+  return resultat
 }
 
 export async function appelerAPI() {
