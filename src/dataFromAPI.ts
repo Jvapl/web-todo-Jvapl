@@ -21,25 +21,22 @@ export async function postDataAPI(taskToSent: NewTask) {
   if (!reponse.ok) {
     const erreur = await reponse.text()
     console.error('Add task Error error:', erreur)
-    return undefined // dit au code que c'est faux et return rien
+    throw new Error('Undefined') // dit au code que c'est faux et return rien
   }
 
-  const texteBrut = await reponse.text()
-
-  if (texteBrut) {
-    const resultat = JSON.parse(texteBrut)
-    return resultat
-  }
-  return undefined
+  const resultat = await reponse.json();
+  
+  if (!resultat) throw new Error('Undefined');
+  return resultat;
 }
 
 export async function appelerAPI() {
-  const reponse = await fetch(url)
-  if (!reponse.ok) {
+  const response = await fetch(url)
+  if (!response.ok) {
     console.error('Recuperation tasks Error')
-    return undefined
+    throw new Error('Undefined')
   }
-  const donnee = await reponse.json()
+  const donnee = await response.json()
   return donnee
 }
 
