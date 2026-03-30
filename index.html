@@ -7,20 +7,29 @@
     <title>Web todolist project</title>
   </head>
   <body>
-    <main id="todo">
-      <header id="headerTodo">
-        <h1>Web todolist app</h1>
-        <p hidden id="overdue-message">⚠️ Overdue tasks ⚠️</p>
-      </header>
-      <div id="cssTodo">
-        <button type="button" id="task-to-do__remove-All-button">Delete All</button>
-        <label for="todo-input">Add new task: <input type="text" id="todo-input"></label>
-        <label for="todo-date-input">Date: <input type="date" id="todo-date-input"></label>
-        <button id="add-todo-button" type="button">New Todo</button>
-      </div>
-      <p hidden id="error">Please enter a task !!</p>
-      <ul id="todo-elements"></ul>
+    <main id="web_todo_all">
+      <footer class="todo">
+          <header id="headerTodo">
+            <h1>Web todolist app</h1>
+            <p hidden id="overdue-message">⚠️ Overdue tasks ⚠️</p>
+          </header>
+        <div id="cssTodo">
+          <button type="button" id="task-to-do__remove-All-button">Delete All</button>
+          <label for="todo-input">Add new task:  <input type="text" id="todo-input"></label>
+          <label for="todo-date-input">Date:  <input type="date" id="todo-date-input"></label>
+          <select name="category" id=""></select>
+          <button id="add-todo-button" class="buttonAdd" type="button">New Todo</button>
+        </div>
+          <p hidden class="error">Please enter a task !!</p>
+          <ul id="todo-elements"></ul>
+      </footer>
+      <section id="category_section" class="todo">
+        <h1>Add category</h1>
+        <label for="category-name-input">Add new category: <input type="text" id="category-name-input"><button type="button" class="buttonAdd" id="addCategoryButton">Add new category</button></label>
+        <label for="category-color-input">category color: <input type="color" id="category-color-input"></label>
+        <ul id="categories-elements"></ul>
+      </section>
     </main>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="./src/srcCode/main.ts" defer></script>
   </body>
 </html>
