@@ -6,8 +6,9 @@ import {
 } from '../QuerySelector'
 import { updateOverdueAlert } from '../reloadPages'
 import type { NewCategorie, NewTask } from '../types'
-import { taskTodo } from '../types'
-import { deleteAPI, deleteAPICategory, updateAPI } from './API'
+import { categoryTodo, taskTodo } from '../types'
+import { deleteAPI, updateAPI } from './API'
+import { deleteAPICategory } from './APIcategories'
 
 export const colorChangeDays = (selectedDate: string) => {
   const colorDay = [
@@ -167,7 +168,7 @@ export const displayCategory = (text: NewCategorie) => {
     try {
       await deleteAPICategory([text])
       NewCategory.remove()
-      const taskIndex = taskTodo.findIndex((e) => e.id === text.id)
+      const taskIndex = categoryTodo.findIndex((e) => e.id === text.id)
       if (taskIndex > -1) {
         taskTodo.splice(taskIndex, 1)
       }

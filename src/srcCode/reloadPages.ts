@@ -1,4 +1,5 @@
-import { appelerAPI, appelerAPICategory } from './addElements/API'
+import { appelerAPI } from './addElements/API'
+import { appelerAPICategory } from './addElements/APIcategories'
 import { displayCategory, displayTask } from './addElements/displayTaskAdd'
 import { categoriesElements, todoElements } from './QuerySelector'
 import type { NewCategorie, NewTask } from './types'
@@ -52,8 +53,8 @@ export const reloadPage = async () => {
     }
     taskTodo.forEach((taskText) => {
       displayTask(taskText)
-      updateOverdueAlert()
     })
+    updateOverdueAlert()
   } catch (e) {
     console.error('Failed to parse tasks from database', e)
   }

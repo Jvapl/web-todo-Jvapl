@@ -1,7 +1,8 @@
 import { categoryColor } from '../QuerySelector'
 import { updateOverdueAlert } from '../reloadPages'
 import type { NewCategorie, NewTask } from '../types'
-import { postCategoryAPI, postDataAPI } from './API'
+import { postDataAPI } from './API'
+import { postCategoryAPI } from './APIcategories'
 import { displayCategory, displayTask } from './displayTaskAdd'
 
 export const addElement = async (

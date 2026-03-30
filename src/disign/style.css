@@ -50,7 +50,7 @@ input {
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  display: flexbox;
+  display: flex;
 }
 .buttonAdd {
   background-color: var(--basic-color-changer-white);
