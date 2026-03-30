@@ -1,7 +1,6 @@
-import type { NewTask } from './types'
+import type { NewTask } from '../types'
 
 const url = 'https://api.todos.in.jt-lab.ch/todos'
-
 // Create
 // ## API Ajouter une tache à l'API -----
 // envoie une nouvelle tache à l'API pour l'enregistrer en base de données
@@ -17,7 +16,6 @@ export async function postDataAPI(taskToSent: NewTask) {
     },
     body: JSON.stringify(taskToSent), // on transforme l'objet en texte JSON
   })
-
   if (!reponse.ok) {
     const erreur = await reponse.text()
     console.error('Add task Error error:', erreur)
