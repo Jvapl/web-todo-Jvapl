@@ -15,7 +15,7 @@ export async function postCategoryAPI(associationToSent: NewCategorieTask) {
   if (!response.ok) {
     const error = await response.text()
     console.error('Add association Error error:', error)
-    throw new Error('Undefined')
+    throw new Error('Failed to create category-task association')
   }
 
   const result = await response.json()
@@ -37,6 +37,3 @@ export async function callAPICategoryTask() {
 // category_id: selectOption?.value ? Number(selectOption.value) : undefined,
 // si l'user choisi une categorie transforme la valeur de selectOption(ID) en nombre
 // sinon c'est undefined
-
-// seria legal se no reload da pagina eu conseguisse fazer que os dois IDs que eu salvei
-// na minha base de dados carreguem juntos com as cores e tudo mais

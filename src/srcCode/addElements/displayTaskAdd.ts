@@ -80,6 +80,7 @@ export const displayTask = (text: NewTask) => {
   if (category) {
     categoryName.textContent = `[${category.title}]`
     newLi.style.border = `2px solid ${category.color}`
+    spanCreated.appendChild(categoryName) /// - -------------------------------------
   }
 
   if (text.due_date) {
@@ -125,7 +126,7 @@ export const displayTask = (text: NewTask) => {
 
       const taskIndex = taskTodo.findIndex((e) => e.id === text.id)
       if (taskIndex > -1) {
-        categoryTodo.splice(taskIndex, 1)
+        taskTodo.splice(taskIndex, 1)
       }
       updateOverdueAlert()
     } catch (error) {
@@ -151,7 +152,7 @@ const getContrastColor = (hexColor: string): string => {
   // On retire le '#' pour avoir 'RRGGBB'
   const hex = hexColor.replace('#', '')
 
-  // On extrait les composants R, G, B avec substring
+  // On extrait les composants R G B avec substring
   const r = Number(`0x${hex.substring(0, 2)}`)
   const g = Number(`0x${hex.substring(2, 4)}`)
   const b = Number(`0x${hex.substring(4, 6)}`)
@@ -159,7 +160,7 @@ const getContrastColor = (hexColor: string): string => {
   // Calcul de la luminosité (formule de luminance relative)
   const brightness = (r * 299 + g * 587 + b * 114) / 1000
 
-  // Si c'est clair (> 128), on écrit en noir. Sinon, en blanc.
+  // Si c'est clair (> 128) on écrit en noir sinon en blanc.
   return brightness > 128 ? 'black' : 'white'
 }
 

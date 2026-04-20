@@ -1,13 +1,8 @@
 import { appelerAPI } from './addElements/API'
 import { appelerAPICategory } from './addElements/APIcategories'
 import { callAPICategoryTask } from './addElements/APIforCateTask'
-import {
-  displayCategory,
-  displayTask,
-  updateCategorySelect,
-} from './addElements/displayTaskAdd'
-import { categoriesElements, selectOption, todoElements } from './QuerySelector'
-import type { NewCategorie, NewCategorieTask, NewTask } from './types'
+import { displayTask } from './addElements/displayTaskAdd'
+import { categoriesElements, todoElements } from './QuerySelector'
 import { BothTC, categoryTodo, taskTodo } from './types'
 
 // MSG - de Overdue une tache qui est en retard
@@ -42,36 +37,31 @@ export const updateOverdueAlert = () => {
 // RELOAD --
 
 export const reloadPage = async () => {
-  if (!todoElements || !categoriesElements || !selectOption) {
-    throw new Error("Couldn't find required DOM elements. Verify index.html")
-  }
   try {
-    const savedCategories: NewCategorie[] | undefined =
-      await appelerAPICategory()
+    if (!categoriesElements || !todoElements) {
+      throw new Error('a')
+    }
+    const [savedCategories, savedAssociations, savedTasks] = await Promise.all([
+      appelerAPICategory(),
+      callAPICategoryTask(),
+      appelerAPI(),
+    ])
+
     if (savedCategories) {
       categoryTodo.length = 0
-      categoriesElements.innerHTML = ''
       categoryTodo.push(...savedCategories)
-      categoryTodo.forEach((categorieText) => {
-        displayCategory(categorieText)
-      })
-      updateCategorySelect(categoryTodo)
     }
 
-    const savedAssociations: NewCategorieTask[] | undefined =
-      await callAPICategoryTask()
     if (savedAssociations) {
       BothTC.length = 0
       BothTC.push(...savedAssociations)
     }
 
-    const savedTasks: NewTask[] | undefined = await appelerAPI()
     if (savedTasks) {
       taskTodo.length = 0
-      todoElements.innerHTML = ''
       taskTodo.push(...savedTasks)
-      taskTodo.forEach((taskText) => {
-        displayTask(taskText)
+      taskTodo.forEach((t) => {
+        displayTask(t)
       })
     }
 

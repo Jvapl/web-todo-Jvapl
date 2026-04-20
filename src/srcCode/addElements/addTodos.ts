@@ -18,6 +18,13 @@ export const addElement = async (
     return
   }
 
+  const currentDate = new Date().toISOString().split('T')[0]
+  if (dateInput.value && dateInput.value < currentDate) {
+    errorInput.textContent = 'Choose a valid date !!'
+    errorInput.removeAttribute('hidden')
+    return
+  }
+
   errorInput.setAttribute('hidden', '')
   const taskToSent: NewTask = {
     title: text,
@@ -29,10 +36,8 @@ export const addElement = async (
     const fromServer = await postDataAPI(taskToSent)
     const finalTask = Array.isArray(fromServer) ? fromServer[0] : fromServer
 
-    if (!finalTask || !finalTask.id) {
-      console.error('Failed to save the task to the server.')
-      return
-    }
+    if (!finalTask || !finalTask.id) return
+
     const selectedCategoryId = selectOption?.value
 
     if (selectedCategoryId) {
@@ -44,10 +49,10 @@ export const addElement = async (
       BothTC.push(association)
     }
     taskTodo.push(finalTask)
-    displayTask(finalTask)
     dateInput.value = ''
     inputTodo.value = ''
     if (selectOption) selectOption.value = ''
+    displayTask(finalTask)
     updateOverdueAlert()
   } catch (error) {
     console.error("The task or association wasn't added", error)
