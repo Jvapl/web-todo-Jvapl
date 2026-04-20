@@ -1,9 +1,9 @@
 import { appelerAPI } from './addElements/API'
 import { appelerAPICategory } from './addElements/APIcategories'
-import { displayCategory, displayTask } from './addElements/displayTaskAdd'
+import { callAPICategoryTask } from './addElements/APIforCateTask'
+import { displayTask } from './addElements/displayTaskAdd'
 import { categoriesElements, todoElements } from './QuerySelector'
-import type { NewCategorie, NewTask } from './types'
-import { categoryTodo, taskTodo } from './types'
+import { BothTC, categoryTodo, taskTodo } from './types'
 
 // MSG - de Overdue une tache qui est en retard
 export const updateOverdueAlert = () => {
@@ -37,45 +37,36 @@ export const updateOverdueAlert = () => {
 // RELOAD --
 
 export const reloadPage = async () => {
-  // Ce fichier aussi je dois le changer
-
-  if (!todoElements) {
-    throw new Error(
-      "Couldn't find the 'todo-elements' DOM element. Verify the ID in index.html",
-    )
-  }
   try {
-    const savedTasks: NewTask[] | undefined = await appelerAPI() //comme ça ne peut pas retourner undefined
-    if (savedTasks) {
-      taskTodo.length = 0
-      todoElements.innerHTML = ''
-      taskTodo.push(...savedTasks)
+    if (!categoriesElements || !todoElements) {
+      throw new Error("One of this elements wasn't found")
     }
-    taskTodo.forEach((taskText) => {
-      displayTask(taskText)
-    })
-    updateOverdueAlert()
-  } catch (e) {
-    console.error('Failed to parse tasks from database', e)
-  }
-  if (!categoriesElements) {
-    throw new Error("didn't find any categories")
-  }
-  try {
-    const savedCategories: NewCategorie[] | undefined =
-      await appelerAPICategory()
+    const [savedCategories, savedAssociations, savedTasks] = await Promise.all([
+      appelerAPICategory(),
+      callAPICategoryTask(),
+      appelerAPI(),
+    ])
+
     if (savedCategories) {
       categoryTodo.length = 0
-      categoriesElements.innerHTML = ''
       categoryTodo.push(...savedCategories)
     }
-    categoryTodo.forEach((categorieText) => {
-      displayCategory(categorieText)
-    })
+
+    if (savedAssociations) {
+      BothTC.length = 0
+      BothTC.push(...savedAssociations)
+    }
+
+    if (savedTasks) {
+      taskTodo.length = 0
+      taskTodo.push(...savedTasks)
+      taskTodo.forEach((t) => {
+        displayTask(t)
+      })
+    }
+
+    updateOverdueAlert()
   } catch (e) {
-    console.error('Failed to parse categories from database', e)
+    console.error('Failed to reload page data', e)
   }
 }
-
-//prendre exemple du code de Ryan avec son if sur le main
-//avec un if pour que je check et stocke avec le bon URl

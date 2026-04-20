@@ -1,9 +1,9 @@
-import { categoryColor } from '../QuerySelector'
+import { selectOption } from '../QuerySelector'
 import { updateOverdueAlert } from '../reloadPages'
-import type { NewCategorie, NewTask } from '../types'
+import { BothTC, type NewTask } from '../types'
 import { postDataAPI } from './API'
-import { postCategoryAPI } from './APIcategories'
-import { displayCategory, displayTask } from './displayTaskAdd'
+import { postCategoryAPI } from './APIforCateTask' // Assurez-vous d'importer la fonction de création
+import { displayTask } from './displayTaskAdd'
 
 export const addElement = async (
   dateInput: HTMLInputElement,
@@ -24,6 +24,7 @@ export const addElement = async (
     errorInput.removeAttribute('hidden')
     return
   }
+
   errorInput.setAttribute('hidden', '')
   const taskToSent: NewTask = {
     title: text,
@@ -33,65 +34,27 @@ export const addElement = async (
   }
   try {
     const fromServer = await postDataAPI(taskToSent)
-    const serverData = Array.isArray(fromServer) ? fromServer[0] : fromServer
-    const finalTask = serverData.id && serverData ? serverData : taskToSent
-    if (!finalTask) {
-      console.error('Failed to save the task to the server.')
-      return
+    const finalTask = Array.isArray(fromServer) ? fromServer[0] : fromServer
+
+    if (!finalTask || !finalTask.id) return
+
+    const selectedCategoryId = selectOption?.value
+
+    if (selectedCategoryId) {
+      const association = {
+        category_id: Number(selectedCategoryId),
+        todo_id: finalTask.id, // On utilise l'ID que le serveur vient de nous donne
+      }
+      await postCategoryAPI(association)
+      BothTC.push(association)
     }
-    //Demande si l'objets qu'on a
-    //reçu a un id si oui envoie fromServer sinon taskToSent
     taskTodo.push(finalTask)
-    displayTask(finalTask)
     dateInput.value = ''
     inputTodo.value = ''
+    if (selectOption) selectOption.value = ''
+    displayTask(finalTask)
     updateOverdueAlert()
   } catch (error) {
-    console.error("the task wasn't add to API", error)
-  }
-}
-
-export const addCategorie = async (
-  errorInput: HTMLParagraphElement,
-  categoryTodo: NewCategorie[],
-) => {
-  const categoryInput = document.querySelector<HTMLInputElement>(
-    '#category-name-input',
-  )
-
-  if (!categoryInput || !categoryColor) {
-    throw new Error(
-      "Didn't find one or many DOM elements. Verify the IDs from index.html.",
-    )
-  }
-
-  const text: string = categoryInput.value.trim()
-  if (!text) {
-    errorInput.textContent = 'Please enter a category !!'
-    errorInput.removeAttribute('hidden')
-    return
-  }
-  errorInput.setAttribute('hidden', '')
-  const categoriesSent: NewCategorie = {
-    title: text,
-    color: categoryColor.value,
-  }
-  try {
-    const fromServer = await postCategoryAPI(categoriesSent)
-    const serverData = Array.isArray(fromServer) ? fromServer[0] : fromServer
-    const finalCategory =
-      serverData.id && serverData ? serverData : categoriesSent
-    if (!finalCategory) {
-      console.error('Failed to save the category to the server.')
-      return
-    }
-    //Demande si l'objets qu'on a
-    //reçu a un id si oui envoie fromServer sinon taskToSent
-    categoryTodo.push(finalCategory) //Je dois faire un debug pour faire en sorte que je puisse ajouter correctement le task
-    displayCategory(finalCategory) // c'est la que ça ne marche pas
-    categoryInput.value = ''
-    // categoryColor.value = '#FFFFFF'
-  } catch (error) {
-    console.error("the category wasn't add to API", error)
+    console.error("The task or association wasn't added", error)
   }
 }

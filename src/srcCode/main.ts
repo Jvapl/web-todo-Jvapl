@@ -1,6 +1,7 @@
 import '../disign/style.css'
 import { deleteAPI } from './addElements/API'
-import { addCategorie, addElement } from './addElements/addTodos'
+import { addACategorie } from './addElements/addCategories'
+import { addElement } from './addElements/addTodos'
 import {
   buttonAdd,
   dateInput,
@@ -35,7 +36,7 @@ if (inputTodo && dateInput && errorInput && buttonAdd) {
   })
 
   buttonAdd.addEventListener('click', () => {
-    addElement(date, error, input, taskTodo)
+    addElement(date, error, input, taskTodo) // __________________________
   })
 }
 
@@ -45,7 +46,6 @@ let deleteTimer: number | undefined
 if (deleteAllTodo && todoElements) {
   const btnDelete = deleteAllTodo
   const list = todoElements
-
   btnDelete.addEventListener('click', async () => {
     const resetBtn = () => {
       isConfirming = false
@@ -74,9 +74,9 @@ if (deleteAllTodo && todoElements) {
 categoryInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
     event.preventDefault() // prevents from the button and request firing twice
-    addCategorie(errorInput as HTMLParagraphElement, categoryTodo)
+    addACategorie(errorInput as HTMLParagraphElement, categoryTodo)
   }
 })
 categoryButtonAdd.addEventListener('click', () => {
-  addCategorie(errorInput as HTMLParagraphElement, categoryTodo)
+  addACategorie(errorInput as HTMLParagraphElement, categoryTodo)
 })

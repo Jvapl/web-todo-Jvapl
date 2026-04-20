@@ -26,5 +26,8 @@ export const categoryColor = queryElement<HTMLInputElement>(
   '#category-color-input',
 )
 
+export const selectOption = queryElement<HTMLSelectElement>(
+  '#associate_categories_tasks',
+)
 // c'est bien que je fasse un fichier de querySelectors pour reutiliser sans faire trop
 //incompreansibles
