@@ -1,5 +1,3 @@
-import '../disign/style.css'
-
 // Je pourrais essayer de faire genre de mettre ça comme parametre d'une function
 // pour que j'en ayes rien a faire a propos
 // interface AddConfig<T, R> {
@@ -14,7 +12,7 @@ import '../disign/style.css'
 
 // useless if statement
 
-import { categoryColor } from '../QuerySelector'
+import { categoryColor, selectOption } from '../QuerySelector'
 import type { NewCategorie } from '../types'
 import { postCategoryAPI } from './APIcategories'
 import { displayCategory } from './displayTaskAdd'
@@ -55,8 +53,14 @@ export const addACategorie = async (
     }
     //Demande si l'objets qu'on a
     //reçu a un id si oui envoie fromServer sinon taskToSent
-    categoryTodo.push(finalCategory) //Je dois faire un debug pour faire en sorte que je puisse ajouter correctement le task
-    displayCategory(finalCategory) // c'est la que ça ne marche pas
+    categoryTodo.push(finalCategory)
+    displayCategory(finalCategory)
+    if (selectOption && finalCategory) {
+      const option = document.createElement('option')
+      option.value = String(finalCategory.id)
+      option.textContent = finalCategory.title
+      selectOption.appendChild(option)
+    }
     categoryInput.value = ''
     // categoryColor.value = '#FFFFFF'
   } catch (error) {

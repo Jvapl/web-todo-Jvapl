@@ -12,7 +12,13 @@ export interface NewCategorie {
   color: string
 }
 
+export interface NewCategorieTask {
+  category_id: number
+  todo_id: number
+}
+
 export const categoryTodo: NewCategorie[] = []
 export const taskTodo: NewTask[] = []
-//Je pourrais mettre les query dans ce meme fichier comme ça je besoin de faire des requetes
+export const BothTC: NewCategorieTask[] = []
+//Je pourrais mettre les query dans ce meme fichier comme ça je pourrais faire des requetes
 //sur ce fichier directement sans avoir besoin de reecrire le code

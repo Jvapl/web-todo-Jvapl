@@ -2,11 +2,12 @@ import {
   categoriesElements,
   categoryColor,
   deleteAllTodo,
+  selectOption,
   todoElements,
 } from '../QuerySelector'
 import { updateOverdueAlert } from '../reloadPages'
 import type { NewCategorie, NewTask } from '../types'
-import { categoryTodo, taskTodo } from '../types'
+import { BothTC, categoryTodo, taskTodo } from '../types'
 import { deleteAPI, updateAPI } from './API'
 import { deleteAPICategory } from './APIcategories'
 
@@ -64,6 +65,23 @@ export const displayTask = (text: NewTask) => {
   spanCreated.classList.add('task-status-container')
   removeButton.classList.add('task-to-do__remove-button')
 
+  const association = BothTC.find((a) => a.todo_id === text.id)
+  // Je compare les id pour que je prenne le bon
+  // a = Il vas chercher si la tache que je veux est dans le tableau
+  const category = association
+    ? categoryTodo.find((e) => e.id === association.category_id)
+    : null
+  // Cherche quelle categorie la tache est liée
+
+  const categoryName = document.createElement('span')
+  categoryName.style.marginRight = '10px'
+  categoryName.style.fontWeight = 'bold'
+
+  if (category) {
+    categoryName.textContent = `[${category.title}]`
+    newLi.style.border = `2px solid ${category.color}`
+  }
+
   if (text.due_date) {
     const taskColor = colorChangeDays(text.due_date)
     if (taskColor) {
@@ -104,9 +122,10 @@ export const displayTask = (text: NewTask) => {
     try {
       await deleteAPI([text])
       newLi.remove()
+
       const taskIndex = taskTodo.findIndex((e) => e.id === text.id)
       if (taskIndex > -1) {
-        taskTodo.splice(taskIndex, 1)
+        categoryTodo.splice(taskIndex, 1)
       }
       updateOverdueAlert()
     } catch (error) {
@@ -182,4 +201,16 @@ export const displayCategory = (text: NewCategorie) => {
   spanCreated.appendChild(removeButton)
   NewCategory.appendChild(spanCreated)
   categoriesElements.appendChild(NewCategory)
+}
+
+export const updateCategorySelect = (categories: NewCategorie[]) => {
+  if (!selectOption) throw new Error('selectOption not find')
+  selectOption.innerHTML = '<option value="">No category</option>' // on ajoute l'option par defaut
+  categories.forEach((cat) => {
+    if (!selectOption) throw new Error('selectOption not find')
+    const option = document.createElement('option')
+    option.value = cat.id?.toString() || '' // On stocke l'ID en tant que string dans la value
+    option.textContent = cat.title // La valeur de l'option deviens l'ID de la tache associée
+    selectOption.appendChild(option)
+  })
 }
