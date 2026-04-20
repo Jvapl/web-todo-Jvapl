@@ -39,7 +39,7 @@ export const updateOverdueAlert = () => {
 export const reloadPage = async () => {
   try {
     if (!categoriesElements || !todoElements) {
-      throw new Error('a')
+      throw new Error("One of this elements wasn't found")
     }
     const [savedCategories, savedAssociations, savedTasks] = await Promise.all([
       appelerAPICategory(),
