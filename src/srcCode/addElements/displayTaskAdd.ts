@@ -13,7 +13,7 @@ import { deleteAPICategory } from './APIcategories'
 
 export const colorChangeDays = (selectedDate: string) => {
   const colorDay = [
-    'var(--overdued-color-red)', //crée une variable avec une couleur OBS(c'est plus facile si je veux changer de couleur après)
+    'var(--overdued-color-red)',
     'var(--overdued-color-orange)',
     'var(--overdued-color-yellow)',
     'var(--overdued-color-green)',
@@ -36,10 +36,8 @@ export const colorChangeDays = (selectedDate: string) => {
   return ''
 }
 
-//ce bout de code je pourrais le changer.
-
 export const displayTask = (text: NewTask) => {
-  // je pourrais faire en sorte de transformer ceci en import
+
   if (!todoElements || !deleteAllTodo) {
     throw new Error(
       "Didn't find one or many DOM elements. Verify the IDs from index.html.",
@@ -66,12 +64,10 @@ export const displayTask = (text: NewTask) => {
   removeButton.classList.add('task-to-do__remove-button')
 
   const association = BothTC.find((a) => a.todo_id === text.id)
-  // Je compare les id pour que je prenne le bon
-  // a = Il vas chercher si la tache que je veux est dans le tableau
+
   const category = association
     ? categoryTodo.find((e) => e.id === association.category_id)
     : null
-  // Cherche quelle categorie la tache est liée
 
   const categoryName = document.createElement('span')
   categoryName.style.marginRight = '10px'
@@ -166,7 +162,7 @@ const getContrastColor = (hexColor: string): string => {
 
 let activeCategoryID: number | null = null
 export const displayCategory = (text: NewCategorie) => {
-  // je pourrais faire en sorte de transformer ceci en import
+
   if (!categoryColor) return
   if (!categoriesElements) {
     throw new Error(
@@ -216,7 +212,7 @@ export const displayCategory = (text: NewCategorie) => {
       // Filtrage
       const filteredTasks = taskTodo.filter((task) => {
         return BothTC.some(
-          // some test si au moins une valeur est vrai si vrai => return vrai
+
           (association) =>
             association.category_id === text.id &&
             association.todo_id === task.id,
@@ -224,11 +220,11 @@ export const displayCategory = (text: NewCategorie) => {
       })
 
       if (filteredTasks.length === 0) {
-        // Si il y a rien je fais rien
+
         return
       }
 
-      activeCategoryID = text.id //Je mets les IDs dans mon activeCategoryID
+      activeCategoryID = text.id
       if (todoElements) {
         todoElements.innerHTML = ''
         filteredTasks.forEach((task) => {
@@ -248,12 +244,12 @@ export const displayCategory = (text: NewCategorie) => {
 
 export const updateCategorySelect = (categories: NewCategorie[]) => {
   if (!selectOption) throw new Error('selectOption not find')
-  selectOption.innerHTML = '<option value="">No category</option>' // on ajoute l'option par defaut
+  selectOption.innerHTML = '<option value="">No category</option>'
   categories.forEach((cat) => {
     if (!selectOption) throw new Error('selectOption not find')
     const option = document.createElement('option')
-    option.value = cat.id?.toString() || '' // On stocke l'ID en tant que string dans la value
-    option.textContent = cat.title // La valeur de l'option deviens l'ID de la tache associée
+    option.value = cat.id?.toString() || '' 
+    option.textContent = cat.title 
     selectOption.appendChild(option)
   })
 }

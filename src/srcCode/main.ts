@@ -36,7 +36,7 @@ if (inputTodo && dateInput && errorInput && buttonAdd) {
   })
 
   buttonAdd.addEventListener('click', () => {
-    addElement(date, error, input, taskTodo) // __________________________
+    addElement(date, error, input, taskTodo) 
   })
 }
 
@@ -73,7 +73,7 @@ if (deleteAllTodo && todoElements) {
 }
 categoryInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
-    event.preventDefault() // prevents from the button and request firing twice
+    event.preventDefault()
     addACategorie(errorInput as HTMLParagraphElement, categoryTodo)
   }
 })

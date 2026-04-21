@@ -20,5 +20,4 @@ export interface NewCategorieTask {
 export const categoryTodo: NewCategorie[] = []
 export const taskTodo: NewTask[] = []
 export const BothTC: NewCategorieTask[] = []
-//Je pourrais mettre les query dans ce meme fichier comme ça je pourrais faire des requetes
-//sur ce fichier directement sans avoir besoin de reecrire le code
+

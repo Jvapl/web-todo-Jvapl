@@ -34,6 +34,3 @@ export async function callAPICategoryTask() {
 
   return data
 }
-// category_id: selectOption?.value ? Number(selectOption.value) : undefined,
-// si l'user choisi une categorie transforme la valeur de selectOption(ID) en nombre
-// sinon c'est undefined

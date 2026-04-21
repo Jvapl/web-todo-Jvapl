@@ -2,7 +2,7 @@ import { selectOption } from '../QuerySelector'
 import { updateOverdueAlert } from '../reloadPages'
 import { BothTC, type NewTask } from '../types'
 import { postDataAPI } from './API'
-import { postCategoryAPI } from './APIforCateTask' // Assurez-vous d'importer la fonction de création
+import { postCategoryAPI } from './APIforCateTask'
 import { displayTask } from './displayTaskAdd'
 
 export const addElement = async (
@@ -43,7 +43,7 @@ export const addElement = async (
     if (selectedCategoryId) {
       const association = {
         category_id: Number(selectedCategoryId),
-        todo_id: finalTask.id, // On utilise l'ID que le serveur vient de nous donne
+        todo_id: finalTask.id,
       }
       await postCategoryAPI(association)
       BothTC.push(association)
