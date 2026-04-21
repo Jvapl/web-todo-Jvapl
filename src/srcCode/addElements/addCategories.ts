@@ -1,17 +1,3 @@
-// Je pourrais essayer de faire genre de mettre ça comme parametre d'une function
-// pour que j'en ayes rien a faire a propos
-// interface AddConfig<T, R> {
-//   input: HTMLParagraphElement
-//   errorElement: HTMLParagraphElement
-//   apiCall: (data: T) => Promise<R> //Donne prends une valeur T et promets un valeur R en retour
-//   onSuccess: (result: R) => void //Callback
-//   buildData: (text: string) => T
-// }
-
-// ------------ essayage d'un autre type de funtion
-
-// useless if statement
-
 import { categoryColor, selectOption } from '../QuerySelector'
 import type { NewCategorie } from '../types'
 import { postCategoryAPI } from './APIcategories'
