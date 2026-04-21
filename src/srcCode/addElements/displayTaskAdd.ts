@@ -212,7 +212,6 @@ export const displayCategory = (text: NewCategorie) => {
           displayTask(task)
         })
       }
-
     } else {
       // Filtrage
       const filteredTasks = taskTodo.filter((task) => {
@@ -221,15 +220,16 @@ export const displayCategory = (text: NewCategorie) => {
           (association) =>
             association.category_id === text.id &&
             association.todo_id === task.id,
-          )
-        })
+        )
+      })
 
-        if (filteredTasks.length === 0){ // Si il y a rien je fais rien
-          return
-        }
+      if (filteredTasks.length === 0) {
+        // Si il y a rien je fais rien
+        return
+      }
 
-        activeCategoryID = text.id //Je mets les IDs dans mon activeCategoryID
-        if (todoElements) {
+      activeCategoryID = text.id //Je mets les IDs dans mon activeCategoryID
+      if (todoElements) {
         todoElements.innerHTML = ''
         filteredTasks.forEach((task) => {
           displayTask(task)
