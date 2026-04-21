@@ -1,7 +1,11 @@
 import { appelerAPI } from './addElements/API'
 import { appelerAPICategory } from './addElements/APIcategories'
 import { callAPICategoryTask } from './addElements/APIforCateTask'
-import { displayTask } from './addElements/displayTaskAdd'
+import {
+  displayCategory,
+  displayTask,
+  updateCategorySelect,
+} from './addElements/displayTaskAdd'
 import { categoriesElements, todoElements } from './QuerySelector'
 import { BothTC, categoryTodo, taskTodo } from './types'
 
@@ -50,8 +54,11 @@ export const reloadPage = async () => {
     if (savedCategories) {
       categoryTodo.length = 0
       categoryTodo.push(...savedCategories)
+      categoryTodo.forEach((c) => {
+        displayCategory(c)
+      })
+      updateCategorySelect(categoryTodo)
     }
-
     if (savedAssociations) {
       BothTC.length = 0
       BothTC.push(...savedAssociations)

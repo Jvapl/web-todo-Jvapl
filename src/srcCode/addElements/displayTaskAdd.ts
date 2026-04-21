@@ -164,6 +164,7 @@ const getContrastColor = (hexColor: string): string => {
   return brightness > 128 ? 'black' : 'white'
 }
 
+let activeCategoryID: number | null = null
 export const displayCategory = (text: NewCategorie) => {
   // je pourrais faire en sorte de transformer ceci en import
   if (!categoryColor) return
@@ -172,7 +173,7 @@ export const displayCategory = (text: NewCategorie) => {
       "Didn't find one or many DOM elements. Verify the IDs from index.html.",
     )
   }
-  const NewCategory = document.createElement('li')
+  const NewCategory = document.createElement('a')
   const spanCreated = document.createElement('span')
   const removeButton = document.createElement('button')
 
@@ -196,6 +197,47 @@ export const displayCategory = (text: NewCategorie) => {
       console.error('Failed to delete task:', error)
     }
   })
+
+  NewCategory.addEventListener('click', () => {
+    if (text.id === undefined) {
+      throw new Error("This category isn't validated")
+    }
+
+    if (activeCategoryID === text.id) {
+      // Reset
+      activeCategoryID = null
+      if (todoElements) {
+        todoElements.innerHTML = ''
+        taskTodo.forEach((task) => {
+          displayTask(task)
+        })
+      }
+
+    } else {
+      // Filtrage
+      const filteredTasks = taskTodo.filter((task) => {
+        return BothTC.some(
+          // some test si au moins une valeur est vrai si vrai => return vrai
+          (association) =>
+            association.category_id === text.id &&
+            association.todo_id === task.id,
+          )
+        })
+
+        if (filteredTasks.length === 0){ // Si il y a rien je fais rien
+          return
+        }
+
+        activeCategoryID = text.id //Je mets les IDs dans mon activeCategoryID
+        if (todoElements) {
+        todoElements.innerHTML = ''
+        filteredTasks.forEach((task) => {
+          displayTask(task)
+        })
+      }
+    }
+  })
+
   const categoryName = document.createElement('span')
   categoryName.textContent = text.title
   NewCategory.appendChild(categoryName)
