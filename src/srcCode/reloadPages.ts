@@ -54,6 +54,7 @@ export const reloadPage = async () => {
     if (savedCategories) {
       categoryTodo.length = 0
       categoryTodo.push(...savedCategories)
+      categoriesElements.innerHTML = ''
       categoryTodo.forEach((c) => {
         displayCategory(c)
       })

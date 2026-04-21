@@ -173,22 +173,22 @@ export const displayCategory = (text: NewCategorie) => {
       "Didn't find one or many DOM elements. Verify the IDs from index.html.",
     )
   }
-  const NewCategory = document.createElement('a')
+  const newCategory = document.createElement('a')
   const spanCreated = document.createElement('span')
   const removeButton = document.createElement('button')
 
   removeButton.textContent = 'Remove'
-  NewCategory.classList.add('category-to-do')
+  newCategory.classList.add('category-to-do')
   removeButton.classList.add('task-to-do__remove-button')
 
   const bgColor = text.color || '#FFFFFF'
-  NewCategory.style.background = bgColor
-  NewCategory.style.color = getContrastColor(bgColor)
+  newCategory.style.background = bgColor
+  newCategory.style.color = getContrastColor(bgColor)
 
   removeButton.addEventListener('click', async () => {
     try {
       await deleteAPICategory([text])
-      NewCategory.remove()
+      newCategory.remove()
       const taskIndex = categoryTodo.findIndex((e) => e.id === text.id)
       if (taskIndex > -1) {
         taskTodo.splice(taskIndex, 1)
@@ -198,7 +198,7 @@ export const displayCategory = (text: NewCategorie) => {
     }
   })
 
-  NewCategory.addEventListener('click', () => {
+  newCategory.addEventListener('click', () => {
     if (text.id === undefined) {
       throw new Error("This category isn't validated")
     }
@@ -240,10 +240,10 @@ export const displayCategory = (text: NewCategorie) => {
 
   const categoryName = document.createElement('span')
   categoryName.textContent = text.title
-  NewCategory.appendChild(categoryName)
+  newCategory.appendChild(categoryName)
   spanCreated.appendChild(removeButton)
-  NewCategory.appendChild(spanCreated)
-  categoriesElements.appendChild(NewCategory)
+  newCategory.appendChild(spanCreated)
+  categoriesElements.appendChild(newCategory)
 }
 
 export const updateCategorySelect = (categories: NewCategorie[]) => {
